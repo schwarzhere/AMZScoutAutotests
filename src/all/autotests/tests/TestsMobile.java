@@ -2,7 +2,7 @@ package all.autotests.tests;
 
 import all.autotests.pages.Checkout;
 import all.autotests.pages.webAppPages.*;
-import all.testsBase.TestBaseMobile;
+import all.autotests.testsBase.TestBaseMobile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;

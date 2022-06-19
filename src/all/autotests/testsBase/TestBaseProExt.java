@@ -1,4 +1,4 @@
-package all.testsBase;
+package all.autotests.testsBase;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class TestBase {
+public class TestBaseProExt {
     protected WebDriver driver;
     protected WebDriverWait wait;
 
@@ -48,15 +48,20 @@ public class TestBase {
     }
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
         var options = new ChromeOptions();
         options.addArguments("--start-maximized");
+        options.addExtensions(new File("E:\\amztests\\target\\app.crx")); //--------------------
         options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
         driver = new ChromeDriver(options);
         initialWindow = driver.getWindowHandle();
         WebDriverWait wait = new WebDriverWait(driver, 10);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        for(String winHandle : driver.getWindowHandles()){
+            driver.switchTo().window(winHandle);
+        }
     }
 
     @AfterEach
@@ -71,6 +76,6 @@ public class TestBase {
             takeScreenshot();
         }
 
-//        driver.quit();
+        driver.quit();
     }
 }

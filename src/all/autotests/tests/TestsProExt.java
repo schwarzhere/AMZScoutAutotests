@@ -4,7 +4,7 @@ import all.autotests.pages.Checkout;
 import all.autotests.pages.GoogleAuthorization;
 import all.autotests.pages.proExtPages.ProExtension;
 import all.autotests.pages.webAppPages.Authorization;
-import all.testsBase.TestBaseProExt;
+import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

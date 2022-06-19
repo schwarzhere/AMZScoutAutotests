@@ -4,7 +4,7 @@ import all.autotests.pages.Checkout;
 import all.autotests.pages.Header;
 import all.autotests.pages.mainPage.MainPage;
 import all.autotests.pages.webAppPages.Sidebar;
-import all.testsBase.TestBase;
+import all.autotests.testsBase.TestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

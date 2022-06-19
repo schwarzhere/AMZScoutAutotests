@@ -1,4 +1,4 @@
-package all.testsBase;
+package all.autotests.testsBase;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class TestBaseMobile {
+public class TestBase {
     protected WebDriver driver;
     protected WebDriverWait wait;
 
@@ -51,10 +51,9 @@ public class TestBaseMobile {
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
         var options = new ChromeOptions();
-        driver = new ChromeDriver(options);
-        Dimension dimension = new Dimension(500, 1000);
-        driver.manage().window().setSize(dimension);
+        options.addArguments("--start-maximized");
         options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
+        driver = new ChromeDriver(options);
         initialWindow = driver.getWindowHandle();
         WebDriverWait wait = new WebDriverWait(driver, 10);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -72,6 +71,6 @@ public class TestBaseMobile {
             takeScreenshot();
         }
 
-        driver.quit();
+//        driver.quit();
     }
 }
