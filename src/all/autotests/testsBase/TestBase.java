@@ -71,6 +71,6 @@ public class TestBase {
             takeScreenshot();
         }
 
-//        driver.quit();
+        driver.quit();
     }
 }

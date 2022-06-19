@@ -50,12 +50,6 @@ public class MainPage {
     @FindBy(id = "button-signup")
     public WebElement signUpButton;
 
-
-
-
-
-
-
     public void openMainPage() {
         driver.navigate().to("https://amzscout.net/");
     }
