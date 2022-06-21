@@ -102,8 +102,20 @@ public class TestsProExt extends TestBaseProExt {
         var pro = new ProExtension(driver, wait);
         pro.authByEmail();
 
+        pro.waitForHiddenLoader();
         pro.nicheHistory.click();
 
         Assertions.assertTrue(pro.nicheHistoryDiagram.isDisplayed());
+    }
+
+    @Test
+    public void nicheKeywordsOpen() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        pro.nicheKeywords.click();
+
+        Assertions.assertTrue(pro.nicheKeywordsCloud.isDisplayed());
     }
 }

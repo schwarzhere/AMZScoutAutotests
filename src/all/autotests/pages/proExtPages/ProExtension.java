@@ -155,4 +155,10 @@ public class ProExtension extends TestBase {
     @FindBy(css = ".agmodal__wrapper--visible .modal--history")
     public WebElement nicheHistoryDiagram;
 
+    @FindBy(xpath = "//i[@class='i-keywords-cloud']/ancestor::a")
+    public WebElement nicheKeywords;
+
+    @FindBy(css = ".agmodal__wrapper--visible .modal--keywords-cloud")
+    public WebElement nicheKeywordsCloud;
+
 }
