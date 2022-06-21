@@ -2,7 +2,9 @@ package all.autotests.tests;
 
 import all.autotests.pages.Checkout;
 import all.autotests.pages.Header;
+import all.autotests.pages.HeaderCn;
 import all.autotests.pages.mainPage.MainPage;
+import all.autotests.pages.mainPage.MainPageCn;
 import all.autotests.pages.webAppPages.Sidebar;
 import all.autotests.testsBase.TestBase;
 import org.junit.jupiter.api.Assertions;
@@ -45,6 +47,30 @@ public class Tests extends TestBase {
 
         var checkout = new Checkout(driver, wait);
         Assertions.assertTrue(checkout.paymentFormNoAuth.isDisplayed());
+    }
+
+    @Test
+    public void checkoutAnnualBundleCn() {
+        var header = new HeaderCn(driver, wait);
+        header.open();
+        header.pricing.click();
+        header.annualBundleBuyNowButton.click();
+
+        var checkout = new Checkout(driver, wait);
+        Assertions.assertTrue(checkout.paymentFormNoAuth.isDisplayed());
+    }
+
+    @Test
+    public void signUpInCtaFormCn() throws InterruptedException {
+        var page = new MainPageCn(driver, wait);
+        page.openMainPageCn();
+        Thread.sleep(2000);
+        page.mainPageSignUpCta();
+        Thread.sleep(3000);
+        page.switchWindow();
+
+        var sidebar = new Sidebar(driver, wait);
+        Assertions.assertTrue(sidebar.sidebar.isDisplayed());
     }
 }
 

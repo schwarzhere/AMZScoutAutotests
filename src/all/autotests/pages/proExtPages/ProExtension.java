@@ -1,5 +1,6 @@
 package all.autotests.pages.proExtPages;
 
+import all.autotests.pages.GoogleAuthorization;
 import all.autotests.testsBase.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -43,6 +44,58 @@ public class ProExtension extends TestBase {
 
     public void switchToFrame() {
         driver.switchTo().frame(frameElementPricing);
+    }
+
+    public void authByEmail() {
+        var pro = new ProExtension(driver, wait);
+        var proExtWindow = driver.getWindowHandle();
+
+        pro.signInByEmailButton.click();
+        pro.switchWindow();
+
+        pro.authByEmailSendEmail();
+        pro.confirmEmailButtonAuthByEmail.click();
+        pro.switchWindow();
+
+        pro.authByEmailSendPassword();
+        pro.authButtonByEmail.click();
+        driver.switchTo().window(proExtWindow);
+    }
+
+    public void authByGoogle() {
+        var pro = new ProExtension(driver, wait);
+        var proExtWindow = driver.getWindowHandle();
+
+        pro.signInByGoogleButton.click();
+        pro.switchWindow();
+
+        var googleAuth = new GoogleAuthorization(driver, wait);
+
+        googleAuth.authByGoogleSendEmail();
+        googleAuth.confirmEmailButtonAuthByGoogle.click();
+        googleAuth.switchWindow();
+
+        googleAuth.authByGoogleSendPassword();
+        googleAuth.confirmEmailButtonAuthByGoogle.click();
+        driver.switchTo().window(proExtWindow);
+    }
+
+    public void authByChrome() {
+        var pro = new ProExtension(driver, wait);
+        var proExtWindow = driver.getWindowHandle();
+
+        pro.signInByChromeButton.click();
+        pro.switchWindow();
+
+        var googleAuth = new GoogleAuthorization(driver, wait);
+
+        googleAuth.authByGoogleSendEmail();
+        googleAuth.confirmEmailButtonAuthByGoogle.click();
+        googleAuth.switchWindow();
+
+        googleAuth.authByGoogleSendPassword();
+        googleAuth.confirmEmailButtonAuthByGoogle.click();
+        driver.switchTo().window(proExtWindow);
     }
 
     @FindBy(css = ".amzs-signin-email")
@@ -89,4 +142,17 @@ public class ProExtension extends TestBase {
 
     @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[4]")
     public WebElement buyNowPricingButton;
+
+    @FindBy(css = "#score-item")
+    public WebElement nicheScore;
+
+    @FindBy(css = ".agmodal__wrapper--visible .os-progress-circle__overlay")
+    public WebElement nicheScoreCircleOverlay;
+
+    @FindBy(xpath = "//div[@ng-if='options.nicheHistory']")
+    public WebElement nicheHistory;
+
+    @FindBy(css = ".agmodal__wrapper--visible .modal--history")
+    public WebElement nicheHistoryDiagram;
+
 }

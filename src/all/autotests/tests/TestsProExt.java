@@ -1,7 +1,6 @@
 package all.autotests.tests;
 
 import all.autotests.pages.Checkout;
-import all.autotests.pages.GoogleAuthorization;
 import all.autotests.pages.proExtPages.ProExtension;
 import all.autotests.pages.webAppPages.Authorization;
 import all.autotests.testsBase.TestBaseProExt;
@@ -13,18 +12,8 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void proExtAuthByEmail() {
         var pro = new ProExtension(driver, wait);
-        var proExtWindow = driver.getWindowHandle();
+        pro.authByEmail();
 
-        pro.signInByEmailButton.click();
-        pro.switchWindow();
-
-        pro.authByEmailSendEmail();
-        pro.confirmEmailButtonAuthByEmail.click();
-        pro.switchWindow();
-
-        pro.authByEmailSendPassword();
-        pro.authButtonByEmail.click();
-        driver.switchTo().window(proExtWindow);
         pro.waitForHiddenLoader();
 
         Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
@@ -33,20 +22,8 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void proExtAuthByGoogle() {
         var pro = new ProExtension(driver, wait);
-        var proExtWindow = driver.getWindowHandle();
+        pro.authByGoogle();
 
-        pro.signInByGoogleButton.click();
-        pro.switchWindow();
-
-        var googleAuth = new GoogleAuthorization(driver, wait);
-
-        googleAuth.authByGoogleSendEmail();
-        googleAuth.confirmEmailButtonAuthByGoogle.click();
-        googleAuth.switchWindow();
-
-        googleAuth.authByGoogleSendPassword();
-        googleAuth.confirmEmailButtonAuthByGoogle.click();
-        driver.switchTo().window(proExtWindow);
         pro.waitForHiddenLoader();
 
         Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
@@ -55,20 +32,8 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void proExtAuthByChrome() {
         var pro = new ProExtension(driver, wait);
-        var proExtWindow = driver.getWindowHandle();
+        pro.authByChrome();
 
-        pro.signInByChromeButton.click();
-        pro.switchWindow();
-
-        var googleAuth = new GoogleAuthorization(driver, wait);
-
-        googleAuth.authByGoogleSendEmail();
-        googleAuth.confirmEmailButtonAuthByGoogle.click();
-        googleAuth.switchWindow();
-
-        googleAuth.authByGoogleSendPassword();
-        googleAuth.confirmEmailButtonAuthByGoogle.click();
-        driver.switchTo().window(proExtWindow);
         pro.waitForHiddenLoader();
 
         Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
@@ -77,18 +42,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void launchBubble() {
         var pro = new ProExtension(driver, wait);
-        var proExtWindow = driver.getWindowHandle();
-
-        pro.signInByEmailButton.click();
-        pro.switchWindow();
-
-        pro.authByEmailSendEmail();
-        pro.confirmEmailButtonAuthByEmail.click();
-        pro.switchWindow();
-
-        pro.authByEmailSendPassword();
-        pro.authButtonByEmail.click();
-        driver.switchTo().window(proExtWindow);
+        pro.authByEmail();
 
         driver.navigate().to(pro.randomAmazonPage);
         pro.launchBubble.click();
@@ -110,7 +64,8 @@ public class TestsProExt extends TestBaseProExt {
         Assertions.assertTrue(pro.pricing.isDisplayed() && pro.buyNowPricingButton.isDisplayed());
     }
 
-    @Test void checkoutOpen() throws InterruptedException {
+    @Test
+    public void checkoutOpen() throws InterruptedException {
         var auth = new Authorization(driver, wait);
         auth.webAppSignUpByEmail();
 
@@ -129,5 +84,26 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         Assertions.assertTrue(checkout.paymentForm.isDisplayed());
+    }
+
+    @Test
+    public void nicheScoreOpen() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+        pro.nicheScore.click();
+
+        Assertions.assertTrue(pro.nicheScoreCircleOverlay.isDisplayed());
+    }
+
+    @Test
+    public void nicheHistoryOpen() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.nicheHistory.click();
+
+        Assertions.assertTrue(pro.nicheHistoryDiagram.isDisplayed());
     }
 }
