@@ -28,7 +28,8 @@ public class TestsMobile extends TestBaseMobile {
 
         var header = new Header(driver, wait);
         header.menuSettings.click();
-        header.buyNowSettingsButton.click();
+        var settings = new Settings(driver, wait);
+        settings.buyNowSettingsButton.click();
 
         var pricing = new Pricing(driver, wait);
         pricing.switchToFrame();
@@ -78,12 +79,4 @@ public class TestsMobile extends TestBaseMobile {
 
         Assertions.assertEquals("产品数据库", header.getCnMarketplaceListTitle(), "Текст различается");
     }
-
-//    @Test
-//    public void teststststs() {
-//        var page = new ProExtension(driver, wait);
-//        driver.navigate().to("https://www.amazon.com/s?k=Outdoor+Plastic+Straw+Rug");
-//        page.signInByEmailButton.click();
-//    }
-
 }

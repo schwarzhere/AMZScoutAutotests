@@ -16,9 +16,6 @@ public class Header {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(css = ".settings__lic-row_btn")
-    public WebElement buyNowSettingsButton;
-
     @FindBy(css = ".main-menu__item-settings")
     public WebElement menuSettings;
 

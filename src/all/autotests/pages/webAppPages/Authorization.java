@@ -32,7 +32,9 @@ public class Authorization {
         return sb.toString();
     }
 
-    private String newTrialUserEmail = generateEmail() + "@amzscout.net";
+
+    public String newTrialUserEmail = generateEmail() + "@amzscout.net";
+    public String newUser = newTrialUserEmail;
     private String email = "autotestamz@mail.ru";
     private String password = "kcDyjVPj";
 
@@ -73,9 +75,14 @@ public class Authorization {
         Thread.sleep(3000);
         switchToFrame();
         emailInputWebApp.sendKeys(newTrialUserEmail);
+        var expectedEmail = getNewTrialUserEmail();
         authButton.click();
         driver.switchTo().parentFrame();
         Thread.sleep(2000);
+    }
+
+    public String getNewTrialUserEmail() {
+        return newTrialUserEmail;
     }
 
     public void webAppSignUpByGoogle() throws InterruptedException {

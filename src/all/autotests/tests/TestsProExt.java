@@ -16,7 +16,8 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
+        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+                "Неудачная авторизация через Email");
     }
 
     @Test
@@ -26,7 +27,8 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
+        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+                "Неудачная авторизация через Google");
     }
 
     @Test
@@ -36,7 +38,8 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled());
+        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+                "Неудачная авторизация через Chrome");
     }
 
     @Test
@@ -117,5 +120,126 @@ public class TestsProExt extends TestBaseProExt {
         pro.nicheKeywords.click();
 
         Assertions.assertTrue(pro.nicheKeywordsCloud.isDisplayed());
+    }
+
+    @Test
+    public void goToNextPage() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+        driver.navigate().to(pro.pageWithMoreThan24products);
+        pro.launchBubble.click();
+
+        pro.waitForLoader();
+        pro.waitForHiddenLoader();
+        var productCount = pro.getProductsListCount();
+        pro.nextPageButton.click();
+
+        pro.waitForHiddenLoader();
+        var productCountWithNextPage = pro.getProductsListCount();
+
+        Assertions.assertTrue(productCountWithNextPage > productCount,
+                "Следующая страница не подгрузилась");
+    }
+
+    @Test
+    public void totalItemsCountHeaderIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        int totalItemCount = Integer.parseInt(pro.getTotalItemCountHeader());
+
+        Assertions.assertTrue(totalItemCount > 0,
+                "Не отображается общее количество продуктов");
+    }
+
+    @Test
+    public void avgMonthlySalesHeaderIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        String avgMonthlySales = pro.getAvgMonthlySalesHeader();
+
+        Assertions.assertTrue(avgMonthlySales != "N/A",
+                "Не отображаются средние продажи по нише");
+    }
+
+    @Test
+    public void avgSalesRankHeaderIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        String avgSalesRank = pro.getAvgSalesRankHeader();
+
+        Assertions.assertTrue(avgSalesRank != "N/A",
+                "Не отображается средний ранг по нише");
+    }
+
+    @Test
+    public void avgPriceHeaderIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        String avgPrice = pro.getAvgPriceHeader();
+
+        Assertions.assertTrue(avgPrice != "N/A",
+                "Не отображается средняя цена по нише");
+    }
+
+    @Test
+    public void avgReviewsIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByGoogle();
+
+        pro.waitForHiddenLoader();
+        String avgReviews = pro.getAvgReviewsHeader();
+
+        Assertions.assertTrue(avgReviews != "N/A",
+                "Не отображается среднее количество комментариев по нише");
+    }
+
+    @Test
+    public void nicheScoreIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForNicheScoreTooltip();
+        pro.waitForNicheScore();
+        int nicheScoreValue = Integer.parseInt(pro.getNicheScoreValueHeader());
+        pro.waitForHiddenLoader();
+
+        Assertions.assertTrue(pro.nicheScoreCircleHeader.isDisplayed() && nicheScoreValue > 0,
+                "Niche Score не подгрузился");
+    }
+
+    @Test
+    public void saturationScoreIsDisplayed() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByChrome();
+
+        int saturationScoreValue = Integer.parseInt(pro.getSaturationScoreCircleValueHeader());
+        pro.waitForHiddenLoader();
+
+        Assertions.assertTrue(pro.saturationScoreCircleHeader.isDisplayed() && saturationScoreValue > 0,
+                "Оценка видимости ниши не подгрузилась");
+    }
+
+    @Test
+    public void searchProductsInSearchBar() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByChrome();
+
+        pro.waitForHiddenLoader();
+        pro.searchBar.clear();
+        pro.searchBar.sendKeys("xbox controller");
+        pro.searchBarButton.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        String newUrl = "https://www.amazon.com/s?k=xbox+controller&ref=nb_sb_noss";
+
+        Assertions.assertEquals(currentUrl, newUrl);
     }
 }

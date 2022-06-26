@@ -32,13 +32,23 @@ public class TestsWebApp extends TestBase {
     }
 
     @Test
+    public void signInWebApp() throws InterruptedException {
+        var page = new Authorization(driver, wait);
+        page.webAppSignIn();
+
+        var sidebar = new Sidebar(driver, wait);
+        Assertions.assertTrue(sidebar.sidebar.isDisplayed());
+    }
+
+    @Test
     public void menuSettingsMonthlyBundleCheckout() throws InterruptedException {
         var auth = new Authorization(driver, wait);
         auth.webAppSignUpByEmail();
 
         var header = new Header(driver, wait);
         header.menuSettings.click();
-        header.buyNowSettingsButton.click();
+        var settings = new Settings(driver, wait);
+        settings.buyNowSettingsButton.click();
 
         var pricing = new Pricing(driver, wait);
         pricing.switchToFrame();
@@ -51,15 +61,6 @@ public class TestsWebApp extends TestBase {
 
         var checkout = new Checkout(driver, wait);
         Assertions.assertTrue(checkout.paymentForm.isDisplayed());
-    }
-
-    @Test
-    public void signInWebApp() throws InterruptedException {
-        var page = new Authorization(driver, wait);
-        page.webAppSignIn();
-
-        var sidebar = new Sidebar(driver, wait);
-        Assertions.assertTrue(sidebar.sidebar.isDisplayed());
     }
 
     @Test
