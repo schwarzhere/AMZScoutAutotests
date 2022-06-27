@@ -242,4 +242,42 @@ public class TestsProExt extends TestBaseProExt {
 
         Assertions.assertEquals(currentUrl, newUrl);
     }
+
+    @Test
+    public void calculatorTotalFBAFeeChanging() throws InterruptedException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByChrome();
+
+        pro.waitForHiddenLoader();
+        pro.profitCalculator.click();
+        String defaultTotalFBAFeeValue = pro.getTotalFBAFeeValueCalculator();
+        System.out.println(defaultTotalFBAFeeValue);
+        pro.productPriceInputCalculator.clear();
+        pro.productPriceInputCalculator.sendKeys("10035");
+        Thread.sleep(3000);
+        String changedTotalFBAFeeValue = pro.getTotalFBAFeeValueCalculator();
+        System.out.println(changedTotalFBAFeeValue);
+
+        Assertions.assertFalse(defaultTotalFBAFeeValue == changedTotalFBAFeeValue,
+                "Значение Total FBA Fee не изменилось");
+    }
+
+    @Test
+    public void calculatorEstMonthlyProfitChanging() throws InterruptedException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+        pro.profitCalculator.click();
+        pro.waitForEstMonthlyProfitCalculator();
+        String defaultEstMonthlyProfit = pro.getEstMonthlyProfitValueCalculator();
+        System.out.println(defaultEstMonthlyProfit);
+        pro.productCostInputCalculator.sendKeys("20");
+        Thread.sleep(2000);
+        String changedEstMonthlyProfit = pro.getEstMonthlyProfitValueCalculator();
+        System.out.println(changedEstMonthlyProfit);
+
+        Assertions.assertFalse(defaultEstMonthlyProfit == changedEstMonthlyProfit,
+                "Значение Est Monthly Profit не изменилось");
+    }
 }

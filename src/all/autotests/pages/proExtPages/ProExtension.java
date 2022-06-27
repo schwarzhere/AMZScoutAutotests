@@ -136,6 +136,30 @@ public class ProExtension extends TestBase {
     @FindBy(xpath = "//div[@ng-if='options.avgReviews']/span")
     public WebElement avgReviewsHeader;
 
+    @FindBy(xpath = "//div[text()='Цена продукта']/ancestor::div[@class='calc-row']//input")
+    public WebElement productPriceInputCalculator;
+
+    @FindBy(xpath = "//input[@ng-model='ctrl.product.cost']")
+    public WebElement productCostInputCalculator;
+
+    @FindBy(xpath = "//div[@class='calc__totals']//div[@ng-show='ctrl.sales']//span")
+    public WebElement estMonthlyProfitValueCalculator;
+
+    @FindBy(css = "div.ng-scope.selected se")
+    public WebElement profitCalculator;
+
+    @FindBy(xpath = "//div[@class='agmodal__wrapper ng-scope agmodal__wrapper--visible']" +
+            "//div[text()='Суммарный FBA сбор']//ancestor::div[@class='calc-row']//span")
+    public WebElement totalFBAFeeValueCalculator;
+
+    public String getEstMonthlyProfitValueCalculator() {
+        return estMonthlyProfitValueCalculator.getText();
+    }
+
+    public String getTotalFBAFeeValueCalculator() {
+        return totalFBAFeeValueCalculator.getText();
+    }
+
     public String getSaturationScoreCircleValueHeader() {
         return saturationScoreCircleValueHeader.getText();
     }
@@ -175,6 +199,11 @@ public class ProExtension extends TestBase {
     public void waitForLoader() {
         new WebDriverWait(driver, 10).until(ExpectedConditions.
                 presenceOfElementLocated(By.xpath("//div[@class='spinner centered']")));
+    }
+
+    public void waitForEstMonthlyProfitCalculator() {
+        new WebDriverWait(driver, 7).until(ExpectedConditions.presenceOfElementLocated
+                (By.xpath("//div[@class='calc__totals']//div[@ng-show='ctrl.sales']//span")));
     }
 
     public void waitForHiddenLoader() {
