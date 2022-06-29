@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class TestBaseProExt {
+public class TestBaseOAExt {
     protected WebDriver driver;
     protected WebDriverWait wait;
 
@@ -52,7 +52,7 @@ public class TestBaseProExt {
         System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
         var options = new ChromeOptions();
         options.addArguments("--start-maximized");
-        options.addExtensions(new File("E:\\amztests\\target\\proext.crx")); //--------------------
+        options.addExtensions(new File("E:\\amztests\\target\\oaext.crx")); //--------------------
         options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
         driver = new ChromeDriver(options);
         initialWindow = driver.getWindowHandle();
@@ -60,6 +60,10 @@ public class TestBaseProExt {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         Thread.sleep(2000);
         for(String winHandle : driver.getWindowHandles()){
+            driver.switchTo().window(winHandle);
+        }
+        driver.close();
+        for(String winHandle : driver.getWindowHandles()) {
             driver.switchTo().window(winHandle);
         }
     }
@@ -75,7 +79,6 @@ public class TestBaseProExt {
             alert.accept();
             takeScreenshot();
         }
-
         driver.quit();
     }
 }

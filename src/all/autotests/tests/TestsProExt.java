@@ -1,7 +1,7 @@
 package all.autotests.tests;
 
 import all.autotests.pages.Checkout;
-import all.autotests.pages.proExtPages.ProExtension;
+import all.autotests.pages.extensionsPages.ProExtension;
 import all.autotests.pages.webAppPages.Authorization;
 import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
@@ -114,7 +114,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void nicheKeywordsOpen() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         pro.nicheKeywords.click();
@@ -144,7 +144,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void totalItemsCountHeaderIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         int totalItemCount = Integer.parseInt(pro.getTotalItemCountHeader());
@@ -156,7 +156,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void avgMonthlySalesHeaderIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         String avgMonthlySales = pro.getAvgMonthlySalesHeader();
@@ -168,7 +168,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void avgSalesRankHeaderIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         String avgSalesRank = pro.getAvgSalesRankHeader();
@@ -180,7 +180,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void avgPriceHeaderIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         String avgPrice = pro.getAvgPriceHeader();
@@ -192,7 +192,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void avgReviewsIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByGoogle();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         String avgReviews = pro.getAvgReviewsHeader();
@@ -218,7 +218,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void saturationScoreIsDisplayed() {
         var pro = new ProExtension(driver, wait);
-        pro.authByChrome();
+        pro.authByEmail();
 
         int saturationScoreValue = Integer.parseInt(pro.getSaturationScoreCircleValueHeader());
         pro.waitForHiddenLoader();
@@ -230,7 +230,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void searchProductsInSearchBar() {
         var pro = new ProExtension(driver, wait);
-        pro.authByChrome();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         pro.searchBar.clear();
@@ -246,7 +246,7 @@ public class TestsProExt extends TestBaseProExt {
     @Test
     public void calculatorTotalFBAFeeChanging() throws InterruptedException {
         var pro = new ProExtension(driver, wait);
-        pro.authByChrome();
+        pro.authByEmail();
 
         pro.waitForHiddenLoader();
         pro.profitCalculator.click();

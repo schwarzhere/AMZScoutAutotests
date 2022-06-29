@@ -1,7 +1,6 @@
-package all.autotests.pages.proExtPages;
+package all.autotests.pages.extensionsPages;
 
 import all.autotests.pages.GoogleAuthorization;
-import all.autotests.testsBase.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class ProExtension extends TestBase {
+public class ProExtension {
     private WebDriver driver;
     private WebDriverWait wait;
 
