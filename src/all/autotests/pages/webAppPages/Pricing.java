@@ -17,6 +17,12 @@ public class Pricing {
         PageFactory.initElements(driver, this);
     }
 
+    public void switchWindow() {
+        for(String winHandle : driver.getWindowHandles()){
+            driver.switchTo().window(winHandle);
+        }
+    }
+
     public void switchToFrame() {
         driver.switchTo().frame(frameElement);
     }

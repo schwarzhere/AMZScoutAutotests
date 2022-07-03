@@ -14,7 +14,7 @@ public class TestsMobile extends TestBaseMobile {
         var auth = new Authorization(driver, wait);
         auth.webAppSignUpByEmail();
 
-        var header = new Header(driver, wait);
+        var header = new HeaderWebApp(driver, wait);
         header.menuBurger.click();
 
         var sidebar = new Sidebar(driver, wait);
@@ -26,7 +26,7 @@ public class TestsMobile extends TestBaseMobile {
         var auth = new Authorization(driver, wait);
         auth.webAppSignUpByEmail();
 
-        var header = new Header(driver, wait);
+        var header = new HeaderWebApp(driver, wait);
         header.menuSettings.click();
         var settings = new Settings(driver, wait);
         settings.buyNowSettingsButton.click();
@@ -73,7 +73,7 @@ public class TestsMobile extends TestBaseMobile {
         var auth = new Authorization(driver, wait);
         auth.webAppSignUpByEmail();
 
-        var header = new Header(driver, wait);
+        var header = new HeaderWebApp(driver, wait);
         header.changeToEngLanguageButton.click();
         header.changeToChinaLanguageButton.click();
 

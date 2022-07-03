@@ -1,10 +1,12 @@
 package all.autotests.pages.webAppPages;
 
 import all.autotests.pages.GoogleAuthorization;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
@@ -65,20 +67,23 @@ public class Authorization {
         }
     }
 
+    public void waitForAuthForm() {
+        new WebDriverWait(driver, 7).until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.PgAuth-Form")));
+    }
+
     public void switchToFrame() {
         driver.switchTo().frame(frameElement);
     }
 
-    public void webAppSignUpByEmail() throws InterruptedException {
-        driver.navigate().to("https://amzscout.net/");
-        signInLink.click();
-        Thread.sleep(3000);
+    public void webAppSignUpByEmail() {
+        driver.navigate().to("https://amzscout.net/app/#/auth/login");
         switchToFrame();
         emailInputWebApp.sendKeys(newTrialUserEmail);
         var expectedEmail = getNewTrialUserEmail();
         authButton.click();
         driver.switchTo().parentFrame();
-        Thread.sleep(2000);
+        new ProductDatabase(driver, wait).waitForWelcomeOnboarding();
     }
 
     public String getNewTrialUserEmail() {
@@ -86,9 +91,7 @@ public class Authorization {
     }
 
     public void webAppSignUpByGoogle() throws InterruptedException {
-        driver.navigate().to("https://amzscout.net/");
-        signInLink.click();
-        Thread.sleep(3000);
+        driver.navigate().to("https://amzscout.net/app/#/auth/login");
         switchToFrame();
         signUpWithGoogleButton.click();
         var googleAuth = new GoogleAuthorization(driver, wait);
@@ -100,16 +103,14 @@ public class Authorization {
         googleAuth.confirmEmailButtonAuthByGoogle.click();
     }
 
-    public void webAppSignIn() throws InterruptedException {
-        driver.navigate().to("https://amzscout.net/");
-        signInLink.click();
-        Thread.sleep(3000);
+    public void webAppSignIn() {
+        driver.navigate().to("https://amzscout.net/app/#/auth/login");
         switchToFrame();
         signInTab.click();
         emailInputWebApp.sendKeys(email);
         passwordInput.sendKeys(password);
         authButton.click();
         driver.switchTo().parentFrame();
-        Thread.sleep(2000);
+//
     }
 }

@@ -53,7 +53,7 @@ public class OnlineArbitrage {
     public WebElement authButtonByEmail;
 
     @FindBy(xpath = "(//img[@title='Close'])[2]")
-    public WebElement closeBanner;
+    public WebElement closeBigBannerButton;
 
     @FindBy(id = "quickView")
     public WebElement oaWindow;
@@ -108,7 +108,7 @@ public class OnlineArbitrage {
     public void closeBigBanner() {
         new WebDriverWait(driver, 15).until(ExpectedConditions.presenceOfElementLocated
                 (By.xpath("(//img[@title='Close'])[2]")));
-        closeBanner.click();
+        closeBigBannerButton.click();
     }
 
     public String getFbmBuyBoxPrice() {

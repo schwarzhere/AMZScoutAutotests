@@ -1,9 +1,11 @@
 package all.autotests.pages.webAppPages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -17,6 +19,12 @@ public class ProductDatabase {
         this.driver = driver;
         this.wait = wait;
         PageFactory.initElements(driver, this);
+    }
+
+    public void switchWindow() {
+        for(String winHandle : driver.getWindowHandles()){
+            driver.switchTo().window(winHandle);
+        }
     }
 
     public String webAppUrl = "https://amzscout.net/app/#/database";
@@ -37,7 +45,7 @@ public class ProductDatabase {
     public WebElement applyButtonCategories;
 
     @FindBy(xpath = "//div[@class='meta__item']/span[text()='Baby Products']")
-    public WebElement categoryColumn;
+    public WebElement babyProductsCategoryColumn;
 
     @FindBy(xpath = "(//div[@title='Add Product to the Tracker'])[1]")
     public WebElement addProductToTheTrackerButton;
@@ -68,6 +76,23 @@ public class ProductDatabase {
 
     @FindBy(xpath = "//popover-container//button")
     public WebElement mainOnboardSkipButton;
+
+    @FindBy(css = "div.datatable-row-center")
+    public List<WebElement> productBlocksList;
+
+    @FindBy(css = "div.popover-content.popover-body")
+    public WebElement welcomeOnboarding;
+
+    public void waitForWelcomeOnboarding() {
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div.popover-content.popover-body")));
+    }
+
+    public void openCategories() {
+        new WebDriverWait(driver, 7).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class='db-filters__input db-filters__input-btn has-data']")));
+        categoriesFilter.click();
+    }
 
     public String getFirstAsinInDatabase() {
         return firstAsinInDatabase.getText();
