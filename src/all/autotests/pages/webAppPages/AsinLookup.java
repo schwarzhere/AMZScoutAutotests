@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class AsinLookup {
     private WebDriver driver;
     private WebDriverWait wait;
@@ -26,6 +28,6 @@ public class AsinLookup {
     @FindBy(xpath = "//button[text()=' Find keywords ']")
     public WebElement findKeywordsButton;
 
-    @FindBy(xpath = "//datatable-body[@class='datatable-body']")
-    public WebElement resultsList;
+    @FindBy(css = "datatable-row-wrapper.datatable-row-wrapper")
+    public List<WebElement> resultsList;
 }

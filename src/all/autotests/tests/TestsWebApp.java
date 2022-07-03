@@ -307,7 +307,6 @@ public class TestsWebApp extends TestBase {
 
         Assertions.assertEquals(expectedUrl, actualUrl,
                 "Переход по клику по лого не произошел");
-
     }
 
     @Test
@@ -315,8 +314,8 @@ public class TestsWebApp extends TestBase {
         new Authorization(driver, wait).webAppSignUpByEmail();
 
         var productDatabase = new ProductDatabase(driver, wait);
-        driver.navigate().to(productDatabase.webAppUrl);
-        Thread.sleep(2000);
+        productDatabase.mainOnboardSkipButton.click();
+        driver.navigate().refresh();
         productDatabase.findProductsButton.click();
         productDatabase.openFirstProductCalculator.click();
         var actualTotalFee = productDatabase.getTotalFeeIndex();
@@ -330,39 +329,38 @@ public class TestsWebApp extends TestBase {
     }
 
     @Test
-    public void refreshProductInDatabase() throws InterruptedException {
+    public void addProductToAsinLookup() {
         new Authorization(driver, wait).webAppSignUpByEmail();
-        var loaderLocator = By.xpath("//datatable-body-row[contains(@class,'updating')]");
 
         var productDatabase = new ProductDatabase(driver, wait);
+        productDatabase.mainOnboardSkipButton.click();
+        driver.navigate().refresh();
 
-        driver.navigate().to(productDatabase.webAppUrl);
-        Thread.sleep(2000);
-        productDatabase.findProductsButton.click();
-        productDatabase.getRefreshProductButton(0).click();
+        var asinLookup = new AsinLookup(driver, wait);
+        asinLookup.open();
+        asinLookup.productAsinInput.sendKeys("B09JVPPB2C");
+        asinLookup.findKeywordsButton.click();
+        wait = new WebDriverWait(driver, 60);
 
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(loaderLocator));
-
-        assertTrue(driver.findElements(loaderLocator).size() == 0, "Товар не обновился");
+        assertTrue(asinLookup.resultsList.size() > 6, "Результаты не отображены");
     }
 
     @Test
-    public void addProductToTracker() throws InterruptedException {
+    public void addProductToKeywordSearch() {
         new Authorization(driver, wait).webAppSignUpByEmail();
-
         var productDatabase = new ProductDatabase(driver, wait);
-        driver.navigate().to(productDatabase.webAppUrl);
-        Thread.sleep(2000);
-        productDatabase.findProductsButton.click();
-        productDatabase.addProductToTheTrackerButton.click();
-        var productDatabaseAsin = productDatabase.getFirstAsinInDatabase();
-        var productTrackerAsin = productDatabase.getFirstAsinInTracker();
-        driver.navigate().to("https://amzscout.net/app/#/tracker");
+        productDatabase.mainOnboardSkipButton.click();
+        driver.navigate().refresh();
 
-        Assertions.assertEquals(productDatabaseAsin, productTrackerAsin, "ASIN в трэкере отличается");
+        var keywordSearch = new KeywordSearch(driver, wait);
+        keywordSearch.open();
+        keywordSearch.closeOnboarding();
+        keywordSearch.keywordInput.sendKeys("office");
+        keywordSearch.findKeywordsButton.click();
+        wait = new WebDriverWait(driver, 60);
+        var firstProductContainsKeyword = keywordSearch.firstFoundKeyword.getText();
 
-        var productTracker = new ProductTracker(driver, wait);
-        productTracker.deleteProductFromTrackerButton.click();
+        assertTrue(firstProductContainsKeyword.contains("office"), "Отображаются некорректные кейворды");
     }
 
     @Test
@@ -396,29 +394,36 @@ public class TestsWebApp extends TestBase {
     }
 
     @Test
-    public void addProductToAsinLookup() {
+    public void addProductToTracker() {
         new Authorization(driver, wait).webAppSignUpByEmail();
 
-        var asinLookup = new AsinLookup(driver, wait);
-        asinLookup.open();
-        asinLookup.productAsinInput.sendKeys("B09JVPPB2C");
-        asinLookup.findKeywordsButton.click();
-        wait = new WebDriverWait(driver, 60);
+        var productDatabase = new ProductDatabase(driver, wait);
+        productDatabase.mainOnboardSkipButton.click();
+        driver.navigate().refresh();
+        productDatabase.findProductsButton.click();
+        var productDatabaseAsin = productDatabase.getFirstAsinInDatabase();
 
-        assertTrue(asinLookup.resultsList.isDisplayed(), "Результаты не отображены");
+        productDatabase.addProductToTheTrackerButton.click();
+        driver.navigate().to("https://amzscout.net/app/#/tracker");
+        var productTrackerAsin = productDatabase.getFirstAsinInTracker();
+
+        Assertions.assertEquals(productDatabaseAsin, productTrackerAsin, "ASIN в трэкере отличается");
     }
 
     @Test
-    public void addProductToKeywordSearch() {
+    public void refreshProductInDatabase() throws InterruptedException {
         new Authorization(driver, wait).webAppSignUpByEmail();
+        var loaderLocator = By.xpath("//datatable-body-row[contains(@class,'updating')]");
 
-        var keywordSearch = new KeywordSearch(driver, wait);
-        keywordSearch.open();
-        keywordSearch.keywordInput.sendKeys("office");
-        keywordSearch.findKeywordsButton.click();
-        wait = new WebDriverWait(driver, 60);
-        var firstProductContainsKeyword = keywordSearch.firstFoundKeyword.getText();
+        var productDatabase = new ProductDatabase(driver, wait);
 
-        assertTrue(firstProductContainsKeyword.contains("office"), "Отображаются некорректные кейворды");
+        driver.navigate().to(productDatabase.webAppUrl);
+        Thread.sleep(2000);
+        productDatabase.findProductsButton.click();
+        productDatabase.getRefreshProductButton(0).click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(loaderLocator));
+
+        assertTrue(driver.findElements(loaderLocator).size() == 0, "Товар не обновился");
     }
 }

@@ -1,9 +1,11 @@
 package all.autotests.pages.webAppPages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class KeywordSearch {
@@ -19,6 +21,15 @@ public class KeywordSearch {
     public void open() {
         driver.navigate().to("https://amzscout.net/app/#/keywords");
     }
+
+    public void closeOnboarding() {
+        new WebDriverWait(driver, 5).until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@class='custom-tour-class__btn']")));
+        closeOnboardingButton.click();
+    }
+
+    @FindBy(xpath = "//button[@class='custom-tour-class__btn']")
+    public WebElement closeOnboardingButton;
 
     @FindBy(xpath = "//input[@placeholder='Type something to search']")
     public WebElement keywordInput;

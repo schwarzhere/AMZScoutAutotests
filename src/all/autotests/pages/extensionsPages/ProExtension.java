@@ -84,8 +84,32 @@ public class ProExtension {
     @FindBy(css = "main.paywall-iframe-modal__main iframe")
     public WebElement frameElementPricing;
 
+    @FindBy(xpath = "//span[@id='promoTarget']")
+    public WebElement checkoutLicencePrice;
+
+    @FindBy(xpath = "//button[@data-id='tab1']")
+    public WebElement payMonthlyTab;
+
+    @FindBy(xpath = "//button[@data-id='tab3']")
+    public WebElement payForALifetimeTab;
+
+    @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[1]")
+    public WebElement buyNowMonthly45ProExtButton;
+
+    @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[2]")
+    public WebElement buyNowMonthly48BundleButton;
+
+    @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[3]")
+    public WebElement buyNowYearly197ProExtButton;
+
     @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[4]")
-    public WebElement buyNowPricingButton;
+    public WebElement buyNowYearly349BundleButton;
+
+    @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[5]")
+    public WebElement buyNowLifetime499ProExtButton;
+
+    @FindBy(xpath = "(//a[@data-event-action='BuyNow'])[6]")
+    public WebElement buyNowLifetime1499BundleButton;
 
     @FindBy(css = "#score-item")
     public WebElement nicheScore;
@@ -151,6 +175,10 @@ public class ProExtension {
             "//div[text()='Суммарный FBA сбор']//ancestor::div[@class='calc-row']//span")
     public WebElement totalFBAFeeValueCalculator;
 
+    public String getCheckoutPriceValue() {
+        return checkoutLicencePrice.getText();
+    }
+
     public String getEstMonthlyProfitValueCalculator() {
         return estMonthlyProfitValueCalculator.getText();
     }
@@ -169,6 +197,11 @@ public class ProExtension {
 
     public void authByEmailSendEmail() {
         emailFieldAuthByEmail.sendKeys("vlad.b@amzscout.net");
+    }
+
+    public void waitForPricing() {
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("#js_newPricingBlock")));
     }
 
     public String getAvgReviewsHeader() {

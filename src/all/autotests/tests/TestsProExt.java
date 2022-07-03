@@ -7,6 +7,8 @@ import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class TestsProExt extends TestBaseProExt {
 
     @Test
@@ -16,7 +18,7 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+        assertTrue(pro.hiddenLoaderProductList.isEnabled(),
                 "Неудачная авторизация через Email");
     }
 
@@ -27,7 +29,7 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+        assertTrue(pro.hiddenLoaderProductList.isEnabled(),
                 "Неудачная авторизация через Google");
     }
 
@@ -38,7 +40,7 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+        assertTrue(pro.hiddenLoaderProductList.isEnabled(),
                 "Неудачная авторизация через Chrome");
     }
 
@@ -50,31 +52,26 @@ public class TestsProExt extends TestBaseProExt {
         driver.navigate().to(pro.randomAmazonPage);
         pro.launchBubble.click();
 
-        Assertions.assertTrue(pro.activeProExtWindow.isDisplayed());
+        assertTrue(pro.activeProExtWindow.isDisplayed());
     }
 
     @Test
     public void pricingOpen() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+        new Authorization(driver, wait).webAppSignUpByEmailForProExt();
 
         var pro = new ProExtension(driver, wait);
         driver.navigate().to(pro.randomAmazonPage);
         pro.launchBubble.click();
         pro.buyButtonTrialUser.click();
         pro.switchToFrame();
-
-        Assertions.assertTrue(pro.pricing.isDisplayed() && pro.buyNowPricingButton.isDisplayed());
+        pro.waitForPricing();
+        assertTrue(pro.pricing.isDisplayed() && pro.buyNowYearly349BundleButton.isDisplayed());
     }
 
     @Test
-    public void checkoutOpen() throws InterruptedException {
+    public void checkoutMonthly45ProExtOpen() throws InterruptedException {
         var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
-
-        auth.switchWindow();
-        driver.close();
-        auth.switchWindow();
+        auth.webAppSignUpByEmailForProExt();
 
         var pro = new ProExtension(driver, wait);
         driver.navigate().to(pro.randomAmazonPage);
@@ -82,11 +79,140 @@ public class TestsProExt extends TestBaseProExt {
         pro.buyButtonTrialUser.click();
         pro.switchToFrame();
         Thread.sleep(3000);
-        pro.buyNowPricingButton.click();
+        pro.payMonthlyTab.click();
+        pro.buyNowMonthly45ProExtButton.click();
         pro.switchWindow();
 
         var checkout = new Checkout(driver, wait);
-        Assertions.assertTrue(checkout.paymentForm.isDisplayed());
+        var expectedPrice = "$ 45.99";
+        var actualPrice = pro.getCheckoutPriceValue();
+
+        Assertions.assertAll(
+                () -> assertTrue(checkout.paymentForm.isDisplayed()),
+                () -> assertTrue(actualPrice.equals(expectedPrice),
+                        "Некорректная цена в чекауте")
+        );
+    }
+
+    @Test
+    public void checkoutMonthly49BundleOpen() throws InterruptedException {
+        var auth = new Authorization(driver, wait);
+        auth.webAppSignUpByEmailForProExt();
+
+        var pro = new ProExtension(driver, wait);
+        driver.navigate().to(pro.randomAmazonPage);
+        pro.launchBubble.click();
+        pro.buyButtonTrialUser.click();
+        pro.switchToFrame();
+        Thread.sleep(3000);
+        pro.payMonthlyTab.click();
+        pro.buyNowMonthly48BundleButton.click();
+        pro.switchWindow();
+
+        var checkout = new Checkout(driver, wait);
+        var expectedPrice = "$ 49.99";
+        var actualPrice = pro.getCheckoutPriceValue();
+
+        Assertions.assertAll(
+                () -> assertTrue(checkout.paymentForm.isDisplayed()),
+                () -> assertTrue(actualPrice.equals(expectedPrice),
+                        "Некорректная цена в чекауте")
+        );
+    }
+
+    @Test
+    public void checkoutYearly197ProExtOpen() throws InterruptedException {
+        var auth = new Authorization(driver, wait);
+        auth.webAppSignUpByEmailForProExt();
+
+        var pro = new ProExtension(driver, wait);
+        driver.navigate().to(pro.randomAmazonPage);
+        pro.launchBubble.click();
+        pro.buyButtonTrialUser.click();
+        pro.switchToFrame();
+        Thread.sleep(3000);
+        pro.buyNowYearly197ProExtButton.click();
+        pro.switchWindow();
+
+        var checkout = new Checkout(driver, wait);
+        var expectedPrice = "$ 197.99";
+        var actualPrice = pro.getCheckoutPriceValue();
+
+        Assertions.assertAll(
+                () -> assertTrue(checkout.paymentForm.isDisplayed()),
+                () -> assertTrue(actualPrice.equals(expectedPrice),
+                        "Некорректная цена в чекауте")
+        );
+    }
+
+    @Test
+    public void checkoutYearly349BundleOpen() throws InterruptedException {
+        var auth = new Authorization(driver, wait);
+        auth.webAppSignUpByEmailForProExt();
+
+        var pro = new ProExtension(driver, wait);
+        driver.navigate().to(pro.randomAmazonPage);
+        pro.launchBubble.click();
+        pro.buyButtonTrialUser.click();
+        pro.switchToFrame();
+        Thread.sleep(3000);
+        pro.buyNowYearly349BundleButton.click();
+        pro.switchWindow();
+
+        var checkout = new Checkout(driver, wait);
+        assertTrue(checkout.paymentForm.isDisplayed());
+    }
+
+    @Test
+    public void checkoutLifetime499ProExtOpen() throws InterruptedException {
+        var auth = new Authorization(driver, wait);
+        auth.webAppSignUpByEmailForProExt();
+
+        var pro = new ProExtension(driver, wait);
+        driver.navigate().to(pro.randomAmazonPage);
+        pro.launchBubble.click();
+        pro.buyButtonTrialUser.click();
+        pro.switchToFrame();
+        Thread.sleep(3000);
+        pro.payForALifetimeTab.click();
+        pro.buyNowLifetime499ProExtButton.click();
+        pro.switchWindow();
+
+        var checkout = new Checkout(driver, wait);
+        var expectedPrice = "$ 499";
+        var actualPrice = pro.getCheckoutPriceValue();
+
+        Assertions.assertAll(
+                () -> assertTrue(checkout.paymentForm.isDisplayed()),
+                () -> assertTrue(actualPrice.equals(expectedPrice),
+                        "Некорректная цена в чекауте")
+        );
+    }
+
+    @Test
+    public void checkoutLifetime1499BundleOpen() throws InterruptedException {
+        var auth = new Authorization(driver, wait);
+        auth.webAppSignUpByEmailForProExt();
+
+        var pro = new ProExtension(driver, wait);
+        driver.navigate().to(pro.randomAmazonPage);
+        pro.launchBubble.click();
+        pro.buyButtonTrialUser.click();
+        pro.switchToFrame();
+        Thread.sleep(3000);
+        pro.payForALifetimeTab.click();
+        pro.buyNowLifetime1499BundleButton.click();
+        pro.switchWindow();
+
+        var checkout = new Checkout(driver, wait);
+        var expectedPrice = "$ 1,499";
+        var actualPrice = pro.getCheckoutPriceValue();
+
+        Assertions.assertAll(
+                () -> assertTrue(checkout.paymentForm.isDisplayed()),
+                () -> assertTrue(actualPrice.equals(expectedPrice),
+                        "Некорректная цена в чекауте")
+        );
     }
 
     @Test
@@ -97,7 +223,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         pro.nicheScore.click();
 
-        Assertions.assertTrue(pro.nicheScoreCircleOverlay.isDisplayed());
+        assertTrue(pro.nicheScoreCircleOverlay.isDisplayed());
     }
 
     @Test
@@ -108,7 +234,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         pro.nicheHistory.click();
 
-        Assertions.assertTrue(pro.nicheHistoryDiagram.isDisplayed());
+        assertTrue(pro.nicheHistoryDiagram.isDisplayed());
     }
 
     @Test
@@ -119,7 +245,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         pro.nicheKeywords.click();
 
-        Assertions.assertTrue(pro.nicheKeywordsCloud.isDisplayed());
+        assertTrue(pro.nicheKeywordsCloud.isDisplayed());
     }
 
     @Test
@@ -137,7 +263,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         var productCountWithNextPage = pro.getProductsListCount();
 
-        Assertions.assertTrue(productCountWithNextPage > productCount,
+        assertTrue(productCountWithNextPage > productCount,
                 "Следующая страница не подгрузилась");
     }
 
@@ -149,7 +275,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         int totalItemCount = Integer.parseInt(pro.getTotalItemCountHeader());
 
-        Assertions.assertTrue(totalItemCount > 0,
+        assertTrue(totalItemCount > 0,
                 "Не отображается общее количество продуктов");
     }
 
@@ -161,7 +287,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         String avgMonthlySales = pro.getAvgMonthlySalesHeader();
 
-        Assertions.assertTrue(avgMonthlySales != "N/A",
+        assertTrue(avgMonthlySales != "N/A",
                 "Не отображаются средние продажи по нише");
     }
 
@@ -173,7 +299,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         String avgSalesRank = pro.getAvgSalesRankHeader();
 
-        Assertions.assertTrue(avgSalesRank != "N/A",
+        assertTrue(avgSalesRank != "N/A",
                 "Не отображается средний ранг по нише");
     }
 
@@ -185,7 +311,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         String avgPrice = pro.getAvgPriceHeader();
 
-        Assertions.assertTrue(avgPrice != "N/A",
+        assertTrue(avgPrice != "N/A",
                 "Не отображается средняя цена по нише");
     }
 
@@ -197,7 +323,7 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
         String avgReviews = pro.getAvgReviewsHeader();
 
-        Assertions.assertTrue(avgReviews != "N/A",
+        assertTrue(avgReviews != "N/A",
                 "Не отображается среднее количество комментариев по нише");
     }
 
@@ -211,7 +337,7 @@ public class TestsProExt extends TestBaseProExt {
         int nicheScoreValue = Integer.parseInt(pro.getNicheScoreValueHeader());
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.nicheScoreCircleHeader.isDisplayed() && nicheScoreValue > 0,
+        assertTrue(pro.nicheScoreCircleHeader.isDisplayed() && nicheScoreValue > 0,
                 "Niche Score не подгрузился");
     }
 
@@ -223,7 +349,7 @@ public class TestsProExt extends TestBaseProExt {
         int saturationScoreValue = Integer.parseInt(pro.getSaturationScoreCircleValueHeader());
         pro.waitForHiddenLoader();
 
-        Assertions.assertTrue(pro.saturationScoreCircleHeader.isDisplayed() && saturationScoreValue > 0,
+        assertTrue(pro.saturationScoreCircleHeader.isDisplayed() && saturationScoreValue > 0,
                 "Оценка видимости ниши не подгрузилась");
     }
 

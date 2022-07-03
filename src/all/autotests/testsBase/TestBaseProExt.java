@@ -62,6 +62,7 @@ public class TestBaseProExt {
         for(String winHandle : driver.getWindowHandles()){
             driver.switchTo().window(winHandle);
         }
+        Thread.sleep(000);
     }
 
     @AfterEach
@@ -76,6 +77,6 @@ public class TestBaseProExt {
             takeScreenshot();
         }
 
-        driver.quit();
+//        driver.quit();
     }
 }
