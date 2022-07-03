@@ -406,4 +406,17 @@ public class TestsProExt extends TestBaseProExt {
         Assertions.assertFalse(defaultEstMonthlyProfit == changedEstMonthlyProfit,
                 "Значение Est Monthly Profit не изменилось");
     }
+
+    @Test
+    public void trialLicenceIsActive() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+        pro.profitCalculator.click();
+
+        Assertions.assertAll(
+                () -> assertTrue(pro.productPriceInputCalculator. isDisplayed()),
+                () -> assertTrue(pro.parsedProductsList.size() > 15));
+    }
 }

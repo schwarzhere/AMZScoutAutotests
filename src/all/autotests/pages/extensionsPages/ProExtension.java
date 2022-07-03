@@ -78,6 +78,9 @@ public class ProExtension {
     @FindBy(id = "search-bar-button")
     public WebElement searchBar;
 
+    @FindBy(css = "div.maintable__row")
+    public List<WebElement> parsedProductsList;
+
     @FindBy(css = "div.search-bar-wrapper button")
     public WebElement searchBarButton;
 
