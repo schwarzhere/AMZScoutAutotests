@@ -3,6 +3,7 @@ package all.autotests.tests;
 import all.autotests.pages.Checkout;
 import all.autotests.pages.extensionsPages.ProExtension;
 import all.autotests.pages.webAppPages.Authorization;
+import all.autotests.pages.webAppPages.ProductDatabase;
 import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -418,5 +419,85 @@ public class TestsProExt extends TestBaseProExt {
         Assertions.assertAll(
                 () -> assertTrue(pro.productPriceInputCalculator. isDisplayed()),
                 () -> assertTrue(pro.parsedProductsList.size() > 15));
+    }
+
+    @Test
+    public void searchForRandomProductIdea() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+
+        pro.productIdeasButton.click();
+        pro.randomProductIdeaButton.click();
+
+        pro.waitForHiddenLoader();
+
+        assertTrue(pro.hiddenLoaderProductList.isEnabled(),
+                "Не спарсилась новая ниша");
+    }
+
+    @Test
+    public void searchForTop1000Bestsellers() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.productIdeasButton.click();
+        pro.top1000BestsellersButton.click();
+
+        pro.switchWindow();
+
+        var productDatabase = new ProductDatabase(driver, wait);
+        int actualRank = Integer.parseInt(productDatabase.getFirstProductRank());
+
+        Assertions.assertTrue((actualRank >= 1) && (actualRank) <= 1000,
+                "Отображены продукты с некорректным рангом");
+    }
+
+    @Test
+    public void searchForNewAndTrendingItems() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.productIdeasButton.click();
+        pro.newAndTrendingItemsButton.click();
+
+        pro.switchWindow();
+        var productDatabase = new ProductDatabase(driver, wait);
+
+        Assertions.assertTrue((productDatabase.newMarkMarkList.size() > 3)
+                        && (productDatabase.trendingMarkMarkList.size() > 3),
+                "Фильтр New and Trending не был применен");
+    }
+
+    @Test
+    public void checkAllColumns() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.personalizeViewButton.click();
+        pro.markAllEmptyCheckboxesPersonalizeView();
+        pro.waitForHiddenLoader();
+
+        Assertions.assertAll(
+                () -> assertTrue(pro.avgMonthlyRevenueHeader.isDisplayed()),
+                () -> assertTrue(pro.avgMarginImpactHeader.isDisplayed()),
+                () -> assertTrue(pro.bsr30valuesList.size() > 10),
+                () -> assertTrue(pro.price30valuesList.size() > 10),
+                () -> assertTrue(pro.minPriceValuesList.size() > 10),
+                () -> assertTrue(pro.netPriceValuesList.size() > 10),
+                () -> assertTrue(pro.bestsellerColumnList.size() > 10),
+                () -> assertTrue(pro.inventoryColumnTitle.isDisplayed()),
+                () -> assertTrue(pro.inventoryValuesList.size() > 10),
+                () -> assertTrue(pro.ebcValuesList.size() > 10),
+                () -> assertTrue(pro.oversizeValuesList.size() > 10));
+
+        pro.firstProductName.click();
+        pro.switchWindow();
+        pro.launchBubble.click();
+        pro.waitForHiddenLoader();
+
+        Assertions.assertAll(
+                () -> assertTrue(pro.parsedProductsList.size() == 1));
     }
 }

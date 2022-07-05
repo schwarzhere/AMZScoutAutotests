@@ -81,6 +81,9 @@ public class ProExtension {
     @FindBy(css = "div.maintable__row")
     public List<WebElement> parsedProductsList;
 
+    @FindBy(xpath = "(//div[contains(@class,'col-name')])[2]//a")
+    public WebElement firstProductName;
+
     @FindBy(css = "div.search-bar-wrapper button")
     public WebElement searchBarButton;
 
@@ -162,6 +165,39 @@ public class ProExtension {
     @FindBy(xpath = "//div[@ng-if='options.avgReviews']/span")
     public WebElement avgReviewsHeader;
 
+    @FindBy(xpath = "//div[@ng-if='options.avgMonthlyRevenue']")
+    public WebElement avgMonthlyRevenueHeader;
+
+    @FindBy(xpath = "//div[@ng-if='options.avgMarginImpact']")
+    public WebElement avgMarginImpactHeader;
+
+    @FindBy(xpath = "//div[@ng-if='options.bsr30']")
+    public List<WebElement> bsr30valuesList;
+
+    @FindBy(xpath = "//div[@ng-if='options.price30']")
+    public List<WebElement> price30valuesList;
+
+    @FindBy(xpath = "//div[@ng-if='options.minPrice']")
+    public List<WebElement> minPriceValuesList;
+
+    @FindBy(xpath = "//div[@ng-if='options.netPrice']")
+    public List<WebElement> netPriceValuesList;
+
+    @FindBy(xpath = "//div[@ng-if='options.bestseller']")
+    public List<WebElement> bestsellerColumnList;
+
+    @FindBy(xpath = "//div[@ng-if='options.inventory']")
+    public WebElement inventoryColumnTitle;
+
+    @FindBy(xpath = "//div[@ng-if='options.ebc']")
+    public List<WebElement> ebcValuesList;
+
+    @FindBy(xpath = "//div[@ng-if='options.oversize']")
+    public List<WebElement> oversizeValuesList;
+
+    @FindBy(xpath = "//section[@ng-if='options.inventory']")
+    public List<WebElement> inventoryValuesList;
+
     @FindBy(xpath = "//div[text()='Цена продукта']/ancestor::div[@class='calc-row']//input")
     public WebElement productPriceInputCalculator;
 
@@ -177,6 +213,39 @@ public class ProExtension {
     @FindBy(xpath = "//div[@class='agmodal__wrapper ng-scope agmodal__wrapper--visible']" +
             "//div[text()='Суммарный FBA сбор']//ancestor::div[@class='calc-row']//span")
     public WebElement totalFBAFeeValueCalculator;
+
+    @FindBy(css = "a.btn-niche-idea")
+    public WebElement productIdeasButton;
+
+    @FindBy(xpath = "//a[@ng-click='ctrl.openRandomNicheIdea()']")
+    public WebElement randomProductIdeaButton;
+
+    @FindBy(xpath = "//a[@ng-click='ctrl.openBest1000Products()']")
+    public WebElement top1000BestsellersButton;
+
+    @FindBy(xpath = "//a[@ng-click='ctrl.openNewProducts()']")
+    public WebElement newAndTrendingItemsButton;
+
+    @FindBy(xpath = "//a[@ng-click='ctrl.showOptions()']")
+    public WebElement personalizeViewButton;
+
+    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine ng-untouched ng-valid ng-empty']//parent::label")
+    public WebElement emptyCheckboxPersonalizeView;
+
+    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine ng-untouched ng-valid ng-empty']//parent::label")
+    public List<WebElement> emptyCheckboxesPersonalizeView;
+
+    @FindBy(xpath = "//button[@ng-click='ctrl.save()']")
+    public WebElement applyButtonPersonalizeView;
+
+    public void markAllEmptyCheckboxesPersonalizeView() {
+        if (emptyCheckboxesPersonalizeView.size() > 0) {
+            for (int i = emptyCheckboxesPersonalizeView.size(); i >= 1; i--) {
+                emptyCheckboxPersonalizeView.click();
+            }
+            applyButtonPersonalizeView.click();
+        }
+    }
 
     public String getCheckoutPriceValue() {
         return checkoutLicencePrice.getText();

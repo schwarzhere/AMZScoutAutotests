@@ -77,11 +77,21 @@ public class ProductDatabase {
     @FindBy(xpath = "//popover-container//button")
     public WebElement mainOnboardSkipButton;
 
-    @FindBy(css = "div.datatable-row-center")
+    @FindBy(xpath = "(//div[@class='datatable-row-center datatable-row-group'])")
     public List<WebElement> productBlocksList;
 
     @FindBy(css = "div.popover-content.popover-body")
     public WebElement welcomeOnboarding;
+
+    @FindBy(xpath = "(//div[@class='datatable-row-center datatable-row-group'])" +
+            "[1]//datatable-body-cell[@class='data-rank datatable-body-cell sort-active']//span")
+    public WebElement rankValueFirstProductInProductList;
+
+    @FindBy(css = "div.chip.chip_new")
+    public List<WebElement> newMarkMarkList;
+
+    @FindBy(xpath = "//div[@class='chip']")
+    public List<WebElement> trendingMarkMarkList;
 
     public void waitForWelcomeOnboarding() {
         new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(
@@ -96,6 +106,10 @@ public class ProductDatabase {
 
     public String getFirstAsinInDatabase() {
         return firstAsinInDatabase.getText();
+    }
+
+    public String getFirstProductRank() {
+        return rankValueFirstProductInProductList.getText();
     }
 
     public String getFirstAsinInTracker() {
