@@ -1,6 +1,7 @@
 package all.autotests.pages.extensionsPages;
 
 import all.autotests.pages.GoogleAuthorization;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,6 +21,13 @@ public class ProExtension {
         this.wait = wait;
         PageFactory.initElements(driver, this);
     }
+
+    public String productScoreForPLnoDataTooltipText = "Amazon does not provide a rank in a parent category " +
+            "for this product, therefore there's not enough data to evaluate how this product would perform " +
+            "via Private Label, Dropshipping or Online Arbitrage";
+
+    public String productScoreForResellingNoDataTooltipText = "This product would not be appropriate for" +
+            " Dropshipping or Online Arbitrage because the label only sells this product themselves";
 
     public String pageWithMoreThan24products = "https://www.amazon.com/s?i=specialty-aps&bbn=16225007011&rh=" +
             "n%3A16225007011%2Cn%3A1292110011&ref=nav_em__nav_desktop_sa_intl_data_storage_0_2_6_5";
@@ -83,6 +91,9 @@ public class ProExtension {
 
     @FindBy(xpath = "(//div[contains(@class,'col-name')])[2]//a")
     public WebElement firstProductName;
+
+    @FindBy(css = "div.modal--history h3")
+    public WebElement productHistoryProductName;
 
     @FindBy(css = "div.search-bar-wrapper button")
     public WebElement searchBarButton;
@@ -149,6 +160,15 @@ public class ProExtension {
 
     @FindBy(css = ".maintable__row-wrapper")
     public List<WebElement> productsList;
+
+    @FindBy(css = "div.selected div.history-action")
+    public WebElement productHistoryButton;
+
+    @FindBy(css = "div.modal--history")
+    public WebElement productHistoryModal;
+
+    @FindBy(id = "chartjs-tooltip")
+    public WebElement productHistoryModalTooltip;
 
     @FindBy(xpath = "//div[@ng-if='options.results']/span")
     public WebElement totalItemsCountHeader;
@@ -229,14 +249,44 @@ public class ProExtension {
     @FindBy(xpath = "//a[@ng-click='ctrl.showOptions()']")
     public WebElement personalizeViewButton;
 
-    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine ng-untouched ng-valid ng-empty']//parent::label")
+    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine " +
+            "ng-untouched ng-valid ng-empty']//parent::label")
     public WebElement emptyCheckboxPersonalizeView;
 
-    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine ng-untouched ng-valid ng-empty']//parent::label")
+    @FindBy(xpath = "//h2[text()='Данные']/ancestor::form//input[@class='ng-pristine " +
+            "ng-untouched ng-valid ng-empty']//parent::label")
     public List<WebElement> emptyCheckboxesPersonalizeView;
 
     @FindBy(xpath = "//button[@ng-click='ctrl.save()']")
     public WebElement applyButtonPersonalizeView;
+
+    @FindBy(xpath = "//div[@ng-if='options.productScore']//div[@message-type='ScoreL']")
+    public WebElement productScoreForPLnoDataTooltip;
+
+    @FindBy(xpath = "//div[@ng-if='options.productScoreReselling']//div[@message-type='ScoreL']")
+    public WebElement productScoreForResellingNoDataTooltip;
+
+    public boolean checkProductScoreForPLnoDataTooltipText() {
+        if (productScoreForPLnoDataTooltip.isDisplayed()) {
+            Assertions.assertTrue(productScoreForPLnoDataTooltip.getAttribute
+                    ("tooltip-template").contains(productScoreForPLnoDataTooltipText),
+                    "Некорректный текст тултипа");
+        } else {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean checkProductScoreForResellingNoDataTooltipText() {
+        if (productScoreForResellingNoDataTooltip.isDisplayed()) {
+            Assertions.assertTrue(productScoreForResellingNoDataTooltip.getAttribute
+                            ("tooltip-template").contains(productScoreForResellingNoDataTooltipText),
+                    "Некорректный текст тултипа");
+        } else {
+            return false;
+        }
+        return false;
+    }
 
     public void markAllEmptyCheckboxesPersonalizeView() {
         if (emptyCheckboxesPersonalizeView.size() > 0) {
@@ -245,6 +295,14 @@ public class ProExtension {
             }
             applyButtonPersonalizeView.click();
         }
+    }
+
+    public String getFirstProductName() {
+        return firstProductName.getText();
+    }
+
+    public String getProductNameInProductHistory() {
+        return productHistoryProductName.getText();
     }
 
     public String getCheckoutPriceValue() {

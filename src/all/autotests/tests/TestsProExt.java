@@ -8,6 +8,7 @@ import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestsProExt extends TestBaseProExt {
@@ -367,7 +368,7 @@ public class TestsProExt extends TestBaseProExt {
         String currentUrl = driver.getCurrentUrl();
         String newUrl = "https://www.amazon.com/s?k=xbox+controller&ref=nb_sb_noss";
 
-        Assertions.assertEquals(currentUrl, newUrl);
+        assertEquals(currentUrl, newUrl);
     }
 
     @Test
@@ -418,7 +419,8 @@ public class TestsProExt extends TestBaseProExt {
 
         Assertions.assertAll(
                 () -> assertTrue(pro.productPriceInputCalculator. isDisplayed()),
-                () -> assertTrue(pro.parsedProductsList.size() > 15));
+                () -> assertTrue(pro.parsedProductsList.size() > 15)
+        );
     }
 
     @Test
@@ -498,6 +500,45 @@ public class TestsProExt extends TestBaseProExt {
         pro.waitForHiddenLoader();
 
         Assertions.assertAll(
-                () -> assertTrue(pro.parsedProductsList.size() == 1));
+                () -> assertTrue(pro.parsedProductsList.size() == 1)
+        );
     }
+
+    @Test
+    public void productHistoryOpen() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+
+        var firstProductName = pro.getFirstProductName();
+        pro.productHistoryButton.click();
+
+        Assertions.assertAll(
+                () -> assertTrue(pro.productHistoryModal.isDisplayed()),
+                () -> assertEquals("- " + firstProductName, pro.getProductNameInProductHistory())
+        );
+    }
+
+    @Test
+    public void checkProductScoreForPLnoDataTooltipText() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+
+        pro.checkProductScoreForPLnoDataTooltipText();
+    }
+
+    @Test
+    public void checkProductScoreForResellingNoDataTooltipText() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+
+        pro.checkProductScoreForResellingNoDataTooltipText();
+    }
+
+
 }

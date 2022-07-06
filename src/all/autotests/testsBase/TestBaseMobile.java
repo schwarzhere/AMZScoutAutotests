@@ -64,14 +64,12 @@ public class TestBaseMobile {
     public void tearDown() throws IOException {
         try {
             takeScreenshot();
-
         } catch (UnhandledAlertException alertException) {
             Alert alert = driver.switchTo().alert();
             System.out.println("Alert text: " + alert.getText());
             alert.accept();
             takeScreenshot();
         }
-
         driver.quit();
     }
 }

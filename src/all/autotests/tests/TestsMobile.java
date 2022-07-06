@@ -10,9 +10,8 @@ import org.openqa.selenium.By;
 public class TestsMobile extends TestBaseMobile {
 
     @Test
-    public void menuBurgerListCheck() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+    public void menuBurgerListCheck() {
+        new Authorization(driver, wait).webAppSignUpByEmailMobile();
 
         var header = new HeaderWebApp(driver, wait);
         header.menuBurger.click();
@@ -22,9 +21,8 @@ public class TestsMobile extends TestBaseMobile {
     }
 
     @Test
-    public void menuSettingsMonthlyBundleCheckout() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+    public void menuSettingsMonthlyBundleCheckout() {
+        new Authorization(driver, wait).webAppSignUpByEmailMobile();
 
         var header = new HeaderWebApp(driver, wait);
         header.menuSettings.click();
@@ -46,9 +44,8 @@ public class TestsMobile extends TestBaseMobile {
     }
 
     @Test
-    public void openFiltersDatabase() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+    public void openFiltersDatabase() {
+        new Authorization(driver, wait).webAppSignUpByEmailMobile();
 
         var productDatabaseMobile = new ProductDatabaseMobile(driver, wait);
         productDatabaseMobile.openFiltersButton.click();
@@ -58,8 +55,7 @@ public class TestsMobile extends TestBaseMobile {
 
     @Test
     public void findProductsDatabase() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+        new Authorization(driver, wait).webAppSignUpByEmailMobile();
 
         var productDatabaseMobile = new ProductDatabaseMobile(driver, wait);
         productDatabaseMobile.openFiltersButton.click();
@@ -69,9 +65,8 @@ public class TestsMobile extends TestBaseMobile {
     }
 
     @Test
-    public void webAppChangeToChina() throws InterruptedException {
-        var auth = new Authorization(driver, wait);
-        auth.webAppSignUpByEmail();
+    public void webAppChangeToChina() {
+        new Authorization(driver, wait).webAppSignUpByEmailMobile();
 
         var header = new HeaderWebApp(driver, wait);
         header.changeToEngLanguageButton.click();

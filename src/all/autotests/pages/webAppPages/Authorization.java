@@ -85,6 +85,15 @@ public class Authorization {
         new ProductDatabase(driver, wait).waitForWelcomeOnboarding();
     }
 
+    public void webAppSignUpByEmailMobile() {
+        driver.navigate().to("https://amzscout.net/app/#/auth/login");
+        switchToFrame();
+        emailInputWebApp.sendKeys(newTrialUserEmail);
+        var expectedEmail = getNewTrialUserEmail();
+        authButton.click();
+        driver.switchTo().parentFrame();
+    }
+
     public void webAppSignUpByEmailForProExt() throws InterruptedException {
         driver.navigate().to("https://amzscout.net/app/#/auth/login");
         Thread.sleep(2000);
