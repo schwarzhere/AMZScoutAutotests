@@ -1,5 +1,6 @@
 package all.autotests.pages.extensionsPages;
 
+import all.autotests.pages.AmazonPage;
 import all.autotests.pages.GoogleAuthorization;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
@@ -92,6 +93,18 @@ public class ProExtension {
     @FindBy(xpath = "(//div[contains(@class,'col-name')])[2]//a")
     public WebElement firstProductName;
 
+    @FindBy(xpath = "(//a[@ng-if='p.rank'])[1]")
+    public WebElement firstProductRank;
+
+    @FindBy(xpath = "//small[@ng-if='p.category']")
+    public WebElement firstProductCategory;
+
+    @FindBy(xpath = "(//small[@ng-if='p.brandUrl'])[1]")
+    public WebElement firstProductBrandName;
+
+    @FindBy(xpath = "(//small[@ng-if='p.brandUrl'])[1]/a")
+    public WebElement firstProductBrandURL;
+
     @FindBy(css = "div.modal--history h3")
     public WebElement productHistoryProductName;
 
@@ -131,6 +144,12 @@ public class ProExtension {
     @FindBy(css = "#score-item")
     public WebElement nicheScore;
 
+    @FindBy(xpath = "(//div[@ng-if='options.sellers'])[1]")
+    public WebElement numberOfSellersColumn;
+
+    @FindBy(xpath = "(//div[@ng-if='options.sellers'])[2]")
+    public WebElement firstProductNumberOfSellersValue;
+
     @FindBy(css = "#score-item i.i-question-na")
     public WebElement nicheScoreQuestionTooltip;
 
@@ -163,6 +182,9 @@ public class ProExtension {
 
     @FindBy(css = "div.selected div.history-action")
     public WebElement productHistoryButton;
+
+    @FindBy(xpath = "//div[contains(@class,'selected')]//div[@ng-click='c.copyASIN(p)']")
+    public WebElement copyAsinButton;
 
     @FindBy(css = "div.modal--history")
     public WebElement productHistoryModal;
@@ -266,6 +288,14 @@ public class ProExtension {
     @FindBy(xpath = "//div[@ng-if='options.productScoreReselling']//div[@message-type='ScoreL']")
     public WebElement productScoreForResellingNoDataTooltip;
 
+    @FindBy(css = "div.as-pro-container")
+    public WebElement proWindow;
+
+    public void launchBubbleClick() throws InterruptedException {
+        launchBubble.click();
+        Thread.sleep(2000);
+    }
+
     public boolean checkProductScoreForPLnoDataTooltipText() {
         if (productScoreForPLnoDataTooltip.isDisplayed()) {
             Assertions.assertTrue(productScoreForPLnoDataTooltip.getAttribute
@@ -297,8 +327,29 @@ public class ProExtension {
         }
     }
 
+    public void changeDeliveryAddress() throws InterruptedException {
+        driver.navigate().to("https://www.amazon.com/s?me=A2XAHTWXWX5ZLM&marketplaceID=ATVPDKIKX0DER");
+        var amazonPage = new AmazonPage(driver, wait);
+        amazonPage.deliverToButton.click();
+        amazonPage.zipCodeInputSendKeys("10005");
+        Thread.sleep(1000);
+        amazonPage.applyZipCode();
+        amazonPage.submitZipCode();
+        driver.navigate().refresh();
+        launchBubble.click();
+
+    }
+
     public String getFirstProductName() {
         return firstProductName.getText();
+    }
+
+    public String getFirstProductNumberOfSellersValue() {
+        return numberOfSellersColumn.getText();
+    }
+
+    public void sortNumberOfSellersDESC() {
+        numberOfSellersColumn.click();
     }
 
     public String getProductNameInProductHistory() {
@@ -308,6 +359,7 @@ public class ProExtension {
     public String getCheckoutPriceValue() {
         return checkoutLicencePrice.getText();
     }
+
 
     public String getEstMonthlyProfitValueCalculator() {
         return estMonthlyProfitValueCalculator.getText();

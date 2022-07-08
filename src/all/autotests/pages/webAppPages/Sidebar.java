@@ -65,13 +65,13 @@ public class Sidebar extends TestBase {
     @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' University ']")
     public WebElement universityClosedSidebar;
 
-    @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Reports ']")
+    @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Trends ']")
     public WebElement reportsClosedSidebar;
 
     @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Hot Products ']")
     public WebElement hotProductsClosedSidebar;
 
-    @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Custom Ideas ']")
+    @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Personal Ideas ']")
     public WebElement customIdeasClosedSidebar;
 
     @FindBy(xpath = "//div[@class='menu-panel__content-top']/div[text()=' Free Bonuses ']")

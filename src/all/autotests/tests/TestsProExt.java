@@ -1,5 +1,6 @@
 package all.autotests.tests;
 
+import all.autotests.pages.AmazonPage;
 import all.autotests.pages.Checkout;
 import all.autotests.pages.extensionsPages.ProExtension;
 import all.autotests.pages.webAppPages.Authorization;
@@ -7,6 +8,12 @@ import all.autotests.pages.webAppPages.ProductDatabase;
 import all.autotests.testsBase.TestBaseProExt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,7 +94,7 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         var expectedPrice = "$ 45.99";
-        var actualPrice = pro.getCheckoutPriceValue();
+        String actualPrice = pro.getCheckoutPriceValue();
 
         Assertions.assertAll(
                 () -> assertTrue(checkout.paymentForm.isDisplayed()),
@@ -113,7 +120,7 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         var expectedPrice = "$ 49.99";
-        var actualPrice = pro.getCheckoutPriceValue();
+        String actualPrice = pro.getCheckoutPriceValue();
 
         Assertions.assertAll(
                 () -> assertTrue(checkout.paymentForm.isDisplayed()),
@@ -138,12 +145,11 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         var expectedPrice = "$ 197.99";
-        var actualPrice = pro.getCheckoutPriceValue();
+        String actualPrice = pro.getCheckoutPriceValue();
 
         Assertions.assertAll(
                 () -> assertTrue(checkout.paymentForm.isDisplayed()),
-                () -> assertTrue(actualPrice.equals(expectedPrice),
-                        "Некорректная цена в чекауте")
+                () -> assertEquals(actualPrice, expectedPrice, "Некорректная цена в чекауте")
         );
     }
 
@@ -182,7 +188,7 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         var expectedPrice = "$ 499";
-        var actualPrice = pro.getCheckoutPriceValue();
+        String actualPrice = pro.getCheckoutPriceValue();
 
         Assertions.assertAll(
                 () -> assertTrue(checkout.paymentForm.isDisplayed()),
@@ -208,7 +214,7 @@ public class TestsProExt extends TestBaseProExt {
 
         var checkout = new Checkout(driver, wait);
         var expectedPrice = "$ 1,499";
-        var actualPrice = pro.getCheckoutPriceValue();
+        String actualPrice = pro.getCheckoutPriceValue();
 
         Assertions.assertAll(
                 () -> assertTrue(checkout.paymentForm.isDisplayed()),
@@ -511,7 +517,7 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
 
-        var firstProductName = pro.getFirstProductName();
+        String firstProductName = pro.getFirstProductName();
         pro.productHistoryButton.click();
 
         Assertions.assertAll(
@@ -540,5 +546,122 @@ public class TestsProExt extends TestBaseProExt {
         pro.checkProductScoreForResellingNoDataTooltipText();
     }
 
+    @Test
+    public void checkProductAsin() throws IOException, UnsupportedFlavorException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
 
+        pro.waitForHiddenLoader();
+        pro.copyAsinButton.click();
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+
+        pro.firstProductName.click();
+        pro.switchWindow();
+
+        var amazonPage = new AmazonPage(driver, wait);
+        String actualProductAsin = amazonPage.productAsin.getText();
+
+        Assertions.assertEquals(parsedProductAsin, actualProductAsin,
+                "Некорректно спарсился ASIN");
+    }
+
+    @Test void checkProductName() throws InterruptedException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        driver.navigate().to("https://www.amazon.com/gp/bestsellers/fashion/5016324011/ref=pd_zg_hrsr_fashion_2_5_last");
+        pro.launchBubbleClick();
+        pro.waitForHiddenLoader();
+        String parsedProductTitle = pro.firstProductName.getText();
+        pro.firstProductName.click();
+        pro.switchWindow();
+
+        var amazonPage = new AmazonPage(driver, wait);
+        String expectedProductTitle = amazonPage.productTitle.getText();
+
+        Assertions.assertEquals(parsedProductTitle, expectedProductTitle,
+                "Некорректно спарсилось название товара");
+
+        System.out.println(parsedProductTitle);
+        System.out.println(expectedProductTitle);
+    }
+
+    @Test void checkProductRankAndCategory() throws InterruptedException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.changeDeliveryAddress();
+
+        pro.waitForHiddenLoader();
+        String parsedProductRank = pro.firstProductRank.getText();
+        String parsedProductCategory = pro.firstProductCategory.getText();
+        pro.firstProductName.click();
+        pro.switchWindow();
+
+        String expectedProductBestSellersRank = new AmazonPage(driver, wait).productBestSellersRank.getText();
+
+        Assertions.assertEquals(expectedProductBestSellersRank,
+                parsedProductRank + " in " + parsedProductCategory +
+                        " (See Top 100 in " + parsedProductCategory + ")",
+                "Некорректо спарсились ранг и/или категория товара");
+
+        System.out.println(expectedProductBestSellersRank);
+        System.out.println(parsedProductRank + " in " + parsedProductCategory +
+                        " (See Top 100 in " + parsedProductCategory + ")");
+    }
+
+//    @Test void checkProductBrand() {
+//        var pro = new ProExtension(driver, wait);
+//        pro.authByEmail();
+//
+//        pro.waitForHiddenLoader();
+//        String parsedBrandName = pro.firstProductBrandName.getText();
+//        pro.firstProductName.click();
+//        pro.switchWindow();
+//
+//        var amazonPage = new AmazonPage(driver, wait);
+//        String expectedBrandName = amazonPage.brandText.getText();
+//
+//        Assertions.assertEquals(expectedBrandName, parsedBrandName,
+//                "Некорректно спарсился бренд товара");
+//    }
+
+    @Test
+    public void checkBrandURL() {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        driver.navigate().to("https://www.amazon.com/s?k=toaster");
+        pro.launchBubble.click();
+        pro.waitForHiddenLoader();
+        String parsedBrandURL = pro.firstProductBrandURL.getAttribute("href");
+        pro.firstProductName.click();
+        pro.switchWindow();
+
+        var amazonPage = new AmazonPage(driver, wait);
+        amazonPage.brandLink.click();
+        String expectedBrandURL = driver.getCurrentUrl();
+
+        Assertions.assertEquals(expectedBrandURL, parsedBrandURL,
+                "Некорректно спарсился URL бренда");
+    }
+
+//    @Test
+//    public void checkNumberOfSellers() {
+//        var pro = new ProExtension(driver, wait);
+//        pro.authByEmail();
+//
+//        pro.waitForHiddenLoader();
+//        pro.sortNumberOfSellersDESC();
+//        String parsedNumberOfSellers = pro.getFirstProductNumberOfSellersValue();
+//        pro.firstProductName.click();
+//        pro.switchWindow();
+//
+//        var amazonPage = new AmazonPage(driver, wait);
+//        amazonPage.openAllSellersButton.click();
+//
+//    }
 }
