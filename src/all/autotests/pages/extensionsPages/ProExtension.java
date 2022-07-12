@@ -75,6 +75,12 @@ public class ProExtension {
     @FindBy(xpath = "//os-circle")
     public WebElement launchBubble;
 
+    public void waitForBubble() {
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//os-circle")));
+        launchBubble.click();
+    }
+
     @FindBy(xpath = "//div[@class='animated as-pro-container']")
     public WebElement activeProExtWindow;
 
@@ -104,6 +110,12 @@ public class ProExtension {
 
     @FindBy(xpath = "(//small[@ng-if='p.brandUrl'])[1]/a")
     public WebElement firstProductBrandURL;
+
+    @FindBy(xpath = "//span[@ng-if='p.inventory || loading']")
+    public WebElement firstProductInventoryValue;
+
+    @FindBy(xpath = "//a[@ng-click='c.showLQS(p.listingQuality)']")
+    public WebElement firstProductListingQualityScore;
 
     @FindBy(css = "div.modal--history h3")
     public WebElement productHistoryProductName;
@@ -291,6 +303,12 @@ public class ProExtension {
     @FindBy(css = "div.as-pro-container")
     public WebElement proWindow;
 
+    @FindBy(xpath = "(//div[@ng-if='options.oversize'])[2]//span")
+    public WebElement firstProductIsOversize;
+
+    @FindBy(xpath = "(//div[@ng-if='options.weight'])[2]//span")
+    public WebElement firstProductWeight;
+
     public void launchBubbleClick() throws InterruptedException {
         launchBubble.click();
         Thread.sleep(2000);
@@ -340,6 +358,10 @@ public class ProExtension {
 
     }
 
+    public String getFirstProductWeight() {
+        return firstProductWeight.getText();
+    }
+
     public String getFirstProductName() {
         return firstProductName.getText();
     }
@@ -386,6 +408,10 @@ public class ProExtension {
                 By.cssSelector("#js_newPricingBlock")));
     }
 
+    public String getFirstProductIsOversize() {
+        return firstProductIsOversize.getText();
+    }
+
     public String getAvgReviewsHeader() {
         return avgReviewsHeader.getText();
     }
@@ -400,6 +426,10 @@ public class ProExtension {
 
     public String getTotalItemCountHeader() {
         return totalItemsCountHeader.getText();
+    }
+
+    public String getProductLQS() {
+        return firstProductListingQualityScore.getText();
     }
 
     public String getAvgMonthlySalesHeader() {
@@ -455,6 +485,23 @@ public class ProExtension {
         driver.switchTo().window(proExtWindow);
     }
 
+    public void authByEmailparameterized(String url) {
+        var pro = new ProExtension(driver, wait);
+        var proExtWindow = driver.getWindowHandle();
+
+        pro.signInByEmailButton.click();
+        pro.switchWindow();
+
+        pro.authByEmailSendEmail();
+        pro.confirmEmailButtonAuthByEmail.click();
+        pro.switchWindow();
+
+        pro.authByEmailSendPassword();
+        pro.authButtonByEmail.click();
+        driver.switchTo().window(proExtWindow);
+        driver.navigate().to(url);
+    }
+
     public void authByGoogle() {
         var pro = new ProExtension(driver, wait);
         var proExtWindow = driver.getWindowHandle();
@@ -490,6 +537,7 @@ public class ProExtension {
         googleAuth.confirmEmailButtonAuthByGoogle.click();
         driver.switchTo().window(proExtWindow);
     }
+
 
     public int getProductsListCount() {
         return productsList.size();

@@ -552,11 +552,12 @@ public class TestsProExt extends TestBaseProExt {
         pro.authByEmail();
 
         pro.waitForHiddenLoader();
-        pro.copyAsinButton.click();
 
+        pro.copyAsinButton.click();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Clipboard clipboard = toolkit.getSystemClipboard();
         var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println(parsedProductAsin);
 
         pro.firstProductName.click();
         pro.switchWindow();
@@ -568,7 +569,7 @@ public class TestsProExt extends TestBaseProExt {
                 "Некорректно спарсился ASIN");
     }
 
-    @Test void checkProductName() throws InterruptedException {
+    @Test void checkProductName() throws InterruptedException, IOException, UnsupportedFlavorException {
         var pro = new ProExtension(driver, wait);
         pro.authByEmail();
 
@@ -576,6 +577,12 @@ public class TestsProExt extends TestBaseProExt {
         pro.launchBubbleClick();
         pro.waitForHiddenLoader();
         String parsedProductTitle = pro.firstProductName.getText();
+
+        pro.copyAsinButton.click();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println(parsedProductAsin);
         pro.firstProductName.click();
         pro.switchWindow();
 
@@ -585,11 +592,12 @@ public class TestsProExt extends TestBaseProExt {
         Assertions.assertEquals(parsedProductTitle, expectedProductTitle,
                 "Некорректно спарсилось название товара");
 
+
         System.out.println(parsedProductTitle);
         System.out.println(expectedProductTitle);
     }
 
-    @Test void checkProductRankAndCategory() throws InterruptedException {
+    @Test void checkProductRankAndCategory() throws InterruptedException, IOException, UnsupportedFlavorException {
         var pro = new ProExtension(driver, wait);
         pro.authByEmail();
 
@@ -597,6 +605,11 @@ public class TestsProExt extends TestBaseProExt {
 
         pro.waitForHiddenLoader();
         String parsedProductRank = pro.firstProductRank.getText();
+        pro.copyAsinButton.click();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println(parsedProductAsin);
         String parsedProductCategory = pro.firstProductCategory.getText();
         pro.firstProductName.click();
         pro.switchWindow();
@@ -611,6 +624,7 @@ public class TestsProExt extends TestBaseProExt {
         System.out.println(expectedProductBestSellersRank);
         System.out.println(parsedProductRank + " in " + parsedProductCategory +
                         " (See Top 100 in " + parsedProductCategory + ")");
+
     }
 
 //    @Test void checkProductBrand() {
@@ -629,13 +643,26 @@ public class TestsProExt extends TestBaseProExt {
 //                "Некорректно спарсился бренд товара");
 //    }
 
+
+//    private static Stream<Arguments> testData() {
+//        return Stream.of(
+//                Arguments.arguments("1", "https://www.amazon.com/s?k=toaster"),
+//                Arguments.arguments("2", "https://www.amazon.co.uk/b?node=580169011&ref=lp_458456031_nr_n_1"),
+//                Arguments.arguments("3", "https://www.amazon.de/s?i=shoes&bbn=1760435031&rh=n%3A1760435031%2Cp_n_format_" +
+//                        "browse-bin%3A13330962031%7C15458312031%7C22477711031&language=en&pf_rd_i=12419320031&pf_rd_m=" +
+//                        "A3JWKAKR8XB7XF&pf_rd_p=82d5413f-597d-42d1-94e0-4881841abe20&pf_rd_r=DQ1SBXS1ZTFDFW0T15KG&pf_rd_s" +
+//                        "=merchandised-search-3&pf_rd_t=101&ref=s9_acss_bw_cg_EUFBMA05_3a1_w")
+//        );
+//    }
+//
+//    @ParameterizedTest
+//    @MethodSource("testData")
+
     @Test
     public void checkBrandURL() {
         var pro = new ProExtension(driver, wait);
         pro.authByEmail();
 
-        driver.navigate().to("https://www.amazon.com/s?k=toaster");
-        pro.launchBubble.click();
         pro.waitForHiddenLoader();
         String parsedBrandURL = pro.firstProductBrandURL.getAttribute("href");
         pro.firstProductName.click();
@@ -647,6 +674,66 @@ public class TestsProExt extends TestBaseProExt {
 
         Assertions.assertEquals(expectedBrandURL, parsedBrandURL,
                 "Некорректно спарсился URL бренда");
+    }
+
+    @Test
+    public void checkProductLQS() throws IOException, UnsupportedFlavorException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.waitForHiddenLoader();
+        int parsedLQS = Integer.parseInt(pro.getProductLQS());
+
+        pro.copyAsinButton.click();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println(parsedProductAsin);
+
+        Assertions.assertTrue(parsedLQS >= 0 && parsedLQS <= 100,
+                "Некорректно спарсился LQS продукта");
+    }
+
+    @Test
+    public void checkProductOversize() throws IOException, UnsupportedFlavorException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.personalizeViewButton.click();
+        pro.markAllEmptyCheckboxesPersonalizeView();
+        pro.waitForHiddenLoader();
+        String parsedProductIsOversize = pro.getFirstProductIsOversize();
+
+        pro.copyAsinButton.click();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println("Проверяемый продукт: " + parsedProductAsin);
+
+        Assertions.assertTrue(parsedProductIsOversize != "N/A",
+                "Отсутствует значение Oversize");
+        System.out.println("Значение Oversize проверяемого продукта: " + pro.firstProductIsOversize.getText());
+    }
+
+    @Test
+    public void checkProductWeight() throws IOException, UnsupportedFlavorException {
+        var pro = new ProExtension(driver, wait);
+        pro.authByEmail();
+
+        pro.personalizeViewButton.click();
+        pro.markAllEmptyCheckboxesPersonalizeView();
+        pro.waitForHiddenLoader();
+        String parsedProductWeight = pro.getFirstProductWeight();
+
+        pro.copyAsinButton.click();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        var parsedProductAsin = clipboard.getData(DataFlavor.stringFlavor);
+        System.out.println("Проверяемый продукт: " + parsedProductAsin);
+
+        Assertions.assertTrue(parsedProductWeight != "N/A",
+                "Отсутствует значение Weight");
+        System.out.println("Значение Weight проверяемого продукта: " + pro.firstProductWeight.getText());
     }
 
 //    @Test
