@@ -49,7 +49,7 @@ public class TestBaseOAExt {
 
     @BeforeEach
     public void setUp() throws InterruptedException {
-        System.setProperty("webdriver.chrome.drive", "C:\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
         var options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.addExtensions(new File("E:\\amztests\\target\\oaext.crx")); //--------------------
