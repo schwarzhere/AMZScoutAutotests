@@ -77,6 +77,6 @@ public class TestBaseProExt {
             takeScreenshot();
         }
 
-//        driver.quit();
+        driver.quit();
     }
 }
